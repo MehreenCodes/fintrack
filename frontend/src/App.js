@@ -22,12 +22,15 @@ const App = () => {
     type: "income",
   });
 
+  // ✅ Use your Render backend URL here
+  const API_BASE_URL = "https://fintrack-4-6lih.onrender.com";
+
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/transactions");
+      const res = await axios.get(`${API_BASE_URL}/transactions`);
       setTransactions(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("❌ Error fetching transactions:", err);
     }
   };
 
@@ -42,20 +45,20 @@ const App = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/transactions", formData);
+      await axios.post(`${API_BASE_URL}/transactions`, formData);
       setFormData({ title: "", amount: "", category: "", type: "income" });
       fetchTransactions();
     } catch (err) {
-      console.error(err);
+      console.error("❌ Error adding transaction:", err);
     }
   };
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/transactions/${id}`);
+      await axios.delete(`${API_BASE_URL}/transactions/${id}`);
       fetchTransactions();
     } catch (err) {
-      console.error(err);
+      console.error("❌ Error deleting transaction:", err);
     }
   };
 
@@ -77,7 +80,7 @@ const App = () => {
       {
         label: "Finance Breakdown",
         data: [totalIncome, totalExpenses],
-        backgroundColor: ["#002366", "#800000"], // dark blue & maroon
+        backgroundColor: ["#002366", "#800000"],
         borderColor: ["#002366", "#800000"],
         borderWidth: 1,
       },
@@ -175,7 +178,7 @@ const App = () => {
           </div>
         </div>
 
-        {/* Project description under summary cards */}
+        {/* Project description */}
         <div
           style={{
             backgroundColor: "#fff",
@@ -187,9 +190,14 @@ const App = () => {
         >
           <h3>System Overview</h3>
           <p>
-  <strong>FinTrack</strong> is a full-stack personal finance dashboard that helps users track income, expenses, and budgets in real time. 
-  Users can <strong>add</strong>, <strong>view</strong>, and <strong>delete</strong> transactions while interactive charts dynamically update to show total income, expenses, and balance. 
-  The system integrates <strong>data-driven visualization</strong> and <strong>real-time updates</strong> to reflect accurate financial insights, simulating real-world financial dashboards.
+            <strong>FinTrack</strong> is a full-stack personal finance dashboard
+            that helps users track income, expenses, and budgets in real time.
+            Users can <strong>add</strong>, <strong>view</strong>, and{" "}
+            <strong>delete</strong> transactions while interactive charts
+            dynamically update to show total income, expenses, and balance. The
+            system integrates <strong>data-driven visualization</strong> and{" "}
+            <strong>real-time updates</strong> to reflect accurate financial
+            insights, simulating real-world financial dashboards.
           </p>
         </div>
 
@@ -276,7 +284,7 @@ const App = () => {
                   <button
                     onClick={() => handleDelete(t.id)}
                     style={{
-                      backgroundColor: t.type === "income" ? "#800000" : "#800000",
+                      backgroundColor: "#800000",
                       color: "white",
                       padding: "0.3rem 0.5rem",
                       border: "none",
@@ -305,11 +313,25 @@ const App = () => {
             flexWrap: "wrap",
           }}
         >
-          <div style={{ width: "300px", backgroundColor: "#fff", padding: "1rem", borderRadius: "8px" }}>
+          <div
+            style={{
+              width: "300px",
+              backgroundColor: "#fff",
+              padding: "1rem",
+              borderRadius: "8px",
+            }}
+          >
             <h3 style={{ textAlign: "center" }}>Income vs Expenses</h3>
             <Pie data={pieData} />
           </div>
-          <div style={{ width: "500px", backgroundColor: "#fff", padding: "1rem", borderRadius: "8px" }}>
+          <div
+            style={{
+              width: "500px",
+              backgroundColor: "#fff",
+              padding: "1rem",
+              borderRadius: "8px",
+            }}
+          >
             <h3 style={{ textAlign: "center" }}>Transaction Amounts</h3>
             <Bar data={barData} />
           </div>
